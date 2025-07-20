@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Assignment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .fade-in {
+      animation: fadeIn 1s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .btn-animate:hover {
+      transform: scale(1.05);
+      transition: transform 0.2s ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 min-h-screen flex items-center justify-center p-6">
+
+  <form id="createForm" class="fade-in bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg space-y-5">
+    <h2 class="text-3xl font-bold text-center text-indigo-700">Create New Assignment</h2>
+
+    <input
+      type="text"
+      id="title"
+      placeholder="Title"
+      required
+      class="w-full px-4 py-2 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    />
+
+    <textarea
+      id="description"
+      placeholder="Description (optional)"
+      rows="4"
+      class="w-full px-4 py-2 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    ></textarea>
+
+    <input
+      type="date"
+      id="due_date"
+      required
+      class="w-full px-4 py-2 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    />
+
+    <button
+      type="submit"
+      class="w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg btn-animate shadow-md hover:bg-indigo-700"
+    >
+      Create Assignment
+    </button>
+
+    <p id="message" class="text-center font-medium hidden"></p>
+  </form>
+
+  <script>
+    document.getElementById('createForm').onsubmit = async function (e) {
+      e.preventDefault();
+
+      const token = localStorage.getItem("token");
+      const title = document.getElementById('title').value;
+      const description = document.getElementById('description').value;
+      const due_date = document.getElementById('due_date').value;
+
+      try {
+        const res = await fetch('http://127.0.0.1:8000/assignments/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+          },
+          body: JSON.stringify({ title, description, due_date })
+        });
+
+        const data = await res.json();
+        showMessage(data.message || 'Assignment created successfully!', 'success');
+      } catch (error) {
+        showMessage('Failed to create assignment. Try again.', 'error');
+      }
+    };
+
+    function showMessage(text, type) {
+      const msg = document.getElementById('message');
+      msg.textContent = text;
+      msg.classList.remove('hidden');
+      msg.classList.toggle('text-green-600', type === 'success');
+      msg.classList.toggle('text-red-600', type === 'error');
+        if (type === 'success') {
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 2000);
+      }
+    }
+  </script>
+
+</body>
+</html>
