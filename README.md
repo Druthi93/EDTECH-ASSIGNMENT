@@ -1,6 +1,6 @@
 A simple and effective tool for managing assignments between teachers and students. Built using **FastAPI** on the backend and a lightweight frontend with **HTML, CSS, and JavaScript** (or React if you prefer). It includes role-based login, assignment creation, submissions, and a clean API.
 1. Clone the Project
-git clone https://github.com/your-username/edtech-assignment-tracker.git
+git clone (https://github.com/Druthi93/EDTECH-ASSIGNMENT/).git
 cd edtech-assignment-tracker
 2. Set Up a Virtual Environment
 python -m venv venv
